@@ -9,7 +9,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   
   useEffect(() => {
-    socket = io("http://localhost:3000");
+    socket = io("http://192.168.0.26:3000");
     
     socket.on('connect', () => {
       console.log('Connected to WebSocket server');

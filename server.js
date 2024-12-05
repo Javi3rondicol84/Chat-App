@@ -11,7 +11,11 @@ app.prepare().then(() => {
   const expressApp = express(); // Create the Express app
   const server = createServer(expressApp); // Create an HTTP server from the Express app
   const io = new Server(server, {
-    path: '/socket.io', // Specify the WebSocket path
+    cors: {
+      origin: '*', // Allow all origins
+      methods: ['GET', 'POST'], // Allowed HTTP methods
+    },
+    path: '/socket.io',
   });
 
   // WebSocket events
@@ -35,7 +39,7 @@ app.prepare().then(() => {
 
   // Start the server
   const PORT = 3000;
-  server.listen(PORT, (err) => {
+  server.listen(PORT, '0.0.0.0', (err) => {
     if (err) throw err;
     console.log(`> Ready on http://localhost:${PORT}`);
   });
