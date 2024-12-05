@@ -1,56 +1,41 @@
 "use client";
 
-import { use, useEffect } from "react";
-import { io, Socket} from "socket.io-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 let socket: Socket | null = null;
 
 export default function Home() {
   const [input, setInput] = useState('');
-
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    if(socket && socket.connected) {
-      socket.emit('input-change', e.target.value);
-    }
-  }
-
+  
   useEffect(() => {
-    const socketInitializer = async () => {
-      console.log('Fetching /api/socket...');
-      await fetch('/api/socket'); // Call API to initialize WebSocket server
-      socket = io();
+    socket = io("http://localhost:3000");
+    
+    socket.on('connect', () => {
+      console.log('Connected to WebSocket server');
+    });
 
-      socket.on('connect', () => {
-        console.log('Connected to WebSocket server');
-      });
-
-      socket.on('update-input', msg => {
-        setInput(msg);
-      });
-
-      socket.on('disconnect', () => {
-        console.log('Disconnected from WebSocket server');
-      });
-    }
-
-    socketInitializer();
+    socket.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+    });
 
     return () => {
-      if (socket) {
-        socket.disconnect();
-      }
+      socket?.disconnect();
     };
   }, []);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+    socket?.emit('input-change', e.target.value);
+  };
+
   return (
     <div>
-      <h1>Welcome to the homepage!</h1>
       <input
-        placeholder="Type something"
+        type="text"
         value={input}
-        onChange={onChangeHandler}
+        onChange={handleInputChange}
+        placeholder="Type something"
       />
     </div>
   );
