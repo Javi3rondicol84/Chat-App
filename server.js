@@ -1,45 +1,44 @@
-const express = require('express');
-const { createServer } = require('http'); // Import the HTTP server module
-const { Server } = require('socket.io'); // Import Socket.IO
-const next = require('next');
+const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const next = require("next");
 
-const dev = process.env.NODE_ENV !== 'production';
+const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-  const expressApp = express(); // Create the Express app
-  const server = createServer(expressApp); // Create an HTTP server from the Express app
+  const expressApp = express();
+  const server = createServer(expressApp);
   const io = new Server(server, {
     cors: {
-      origin: '*', // Allow all origins
-      methods: ['GET', 'POST'], // Allowed HTTP methods
+      origin: "*",
+      methods: ["GET", "POST"],
     },
-    path: '/socket.io',
+    path: "/socket.io",
   });
 
   // WebSocket events
-  io.on('connection', (socket) => {
-    console.log('A user connected');
+  io.on("connection", (socket) => {
+    console.log(`Client connected: ${socket.id}`);
+    socket.emit("userId", socket.id); // Enviar userId al cliente
 
-    socket.on('input-change', (msg) => {
-      console.log(`Input received: ${msg}`);
-      socket.broadcast.emit('update-input', msg);
+    socket.on("sendMessage", (message) => {
+      const payload = { id: socket.id, text: message };
+      io.emit("receiveMessage", payload); // Retransmitir mensaje a todos
     });
 
-    socket.on('disconnect', () => {
-      console.log('A user disconnected');
+    socket.on("disconnect", () => {
+      console.log(`Client disconnected: ${socket.id}`);
     });
   });
 
-  // Handle all HTTP requests with Next.js
-  expressApp.all('*', (req, res) => {
-    return handle(req, res);
-  });
+  // Manejar peticiones HTTP con Next.js
+  expressApp.all("*", (req, res) => handle(req, res));
 
-  // Start the server
+  // Iniciar servidor
   const PORT = 3000;
-  server.listen(PORT, '0.0.0.0', (err) => {
+  server.listen(PORT, "0.0.0.0", (err) => {
     if (err) throw err;
     console.log(`> Ready on http://localhost:${PORT}`);
   });
