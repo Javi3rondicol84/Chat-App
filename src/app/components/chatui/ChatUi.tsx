@@ -1,3 +1,5 @@
+
+
 interface ChatUiProps {
   messages: { id: string; text: string }[];
   userId: string | null;
@@ -5,6 +7,7 @@ interface ChatUiProps {
 
 export function ChatUi({ messages, userId }: ChatUiProps) {
   return (
+    <>
     <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ddd", padding: "10px" }}>
       {messages.map((msg, index) => (
         <div
@@ -21,5 +24,7 @@ export function ChatUi({ messages, userId }: ChatUiProps) {
         </div>
       ))}
     </div>
+    </>
+    
   );
 }

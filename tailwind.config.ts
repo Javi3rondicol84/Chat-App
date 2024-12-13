@@ -1,19 +1,12 @@
-import type { Config } from "tailwindcss";
-
-export default {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",   // Incluir la carpeta pages
+    "./src/app/components/**/*.{js,ts,jsx,tsx}",  // Incluir la carpeta components dentro de src
+    "./src/globals.css",  // Incluir el archivo globals.css dentro de src
   ],
   theme: {
-    extend: {
-      colors: {
-        'blue-600': '#0000AA',
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-    },
+    extend: {},
   },
   plugins: [],
-} satisfies Config;
+}
