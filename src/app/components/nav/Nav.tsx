@@ -8,8 +8,8 @@ const Nav = () => {
                 <nav className="flex bg-blue-300 w-8/12 h-full">
                     <ul className="flex justify-evenly w-full items-center">
                         <li><a className="hover:text-green-500" href="./mychats">my chats</a></li>
-                        <li><a className="hover:text-green-500" href="./login">login</a></li>
-                        <li><a className="hover:text-green-500" href="./register">register</a></li>
+                        <li><a className="hover:text-green-500" href="./users">users-list</a></li>
+                        <li><a className="hover:text-green-500" href="./logout">logout</a></li>
                     </ul>
                 </nav>
             </header>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";  
+import React, { useState, useEffect } from "react";  
 import { createOrLoginUser } from "@/app/utils/api";
 
 const RegisterSection = () => {
@@ -16,6 +16,8 @@ const RegisterSection = () => {
             const data = await createOrLoginUser("register", name, password);
 
             console.log(data);
+
+            window.location.href = '/mychats';
         }
         catch(err) {
             console.log("error creating user: "+err);

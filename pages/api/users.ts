@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from 'bcryptjs';
 import mysql from 'mysql2';
 import { RowDataPacket } from "mysql2";
+import { generateToken} from "@/app/utils/jwt";
 
 type User = {
   id: number;
@@ -82,7 +83,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             return res.status(401).json({ error: "Invalid name or password" });
           }
     
-          res.status(200).json({ message: "Login successful", user: { id: user.id, name: user.name } });
+          const name: string = user.name;
+          const token = generateToken({name});
+
+          // res.status(200).json({ message: "Login successful", user: { id: user.id, name: user.name } });
+          res.status(200).json({ message: "Login successful", token });
+          return token;
         });
       });
     }

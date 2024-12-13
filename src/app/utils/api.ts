@@ -13,6 +13,7 @@ export const createOrLoginUser = async (action: string, name: string, password: 
       }
   
       const data = await response.json();
+      console.log(data);
       return data; // This will contain the response from the server, such as user details
     } catch (error) {
       console.error('Error creating user:', error);

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { ChatUi } from "../chatui/ChatUi";
 
+
+
 let socket: Socket | null = null; // Mantener el socket como singleton
 
 export default function SocketClient() {
@@ -50,7 +52,9 @@ export default function SocketClient() {
   };
 
   return (
-    <div>
+    <>
+
+
       <h1 className="text-blue-600">Chat en tiempo real</h1>
       <ChatUi messages={messages} userId={userId} />
       <div>
@@ -62,6 +66,7 @@ export default function SocketClient() {
         />
         <button onClick={sendMessage}>Enviar</button>
       </div>
-    </div>
+
+    </>
   );
 }
