@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { ChatUi } from "../chatui/ChatUi";
 
-
-
 let socket: Socket | null = null; // Mantener el socket como singleton
 
 export default function SocketClient() {
@@ -51,11 +49,12 @@ export default function SocketClient() {
     }
   };
 
+  const userIdOtherUser = localStorage.getItem('secondUserId');
+
   return (
     <>
 
-
-      <h1 className="text-blue-600">Chat en tiempo real</h1>
+      <h1 className="text-blue-600">Chat en tiempo real con {userIdOtherUser}</h1>
       <ChatUi messages={messages} userId={userId} />
       <div>
         <input

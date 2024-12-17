@@ -28,7 +28,7 @@ const LoginSection = () => {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userLoggedId', data.id);
                 setToken(data.token);
-                window.location.href = '/mychats';
+                window.location.href = '/users-list';
 
             }
             catch(err) {

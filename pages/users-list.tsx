@@ -7,6 +7,10 @@ import StartChat from "@/app/components/startchat/StartChat";
 const UsersList = () => {
     const [users, setUsers] = useState<User[]>([]);
 
+    type Data = {
+        
+    }
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -29,6 +33,8 @@ const UsersList = () => {
         const fetchUserById = async () => {
             try {
                 const userLoggedId = localStorage.getItem('userLoggedId');
+                const secondUserId: string = userId.toString();
+                localStorage.setItem('secondUserId', secondUserId);
                 console.log("userloggedid: "+userLoggedId);
                 console.log("userToStartChat: "+userId);
 
@@ -38,7 +44,7 @@ const UsersList = () => {
                     window.location.href = '/chat';
                 }
                 else {
-                    alert("ir a chat que ya existe entre ambos");
+                    window.location.href = '/chat';
                 }
                 
             }

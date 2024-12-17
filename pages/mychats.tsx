@@ -1,5 +1,4 @@
 "use client";
-import SocketClient from "@/app/websocket/socket-client";
 import React, { useEffect, useState } from "react";
 import { getToken, verifyToken } from "@/app/utils/jwt";
 import Nav from "@/app/components/nav/Nav";
@@ -20,14 +19,15 @@ const MyChats = () => {
 
     return (
         <> 
-            {token ? (
+            {/* {token ? (
                 <>
                  <Nav />
                  <SocketClient />   
                 </>
             ): (
                 <h1>Redirecting...</h1>
-            )};
+            )}; */}
+            <h2>sssss</h2>
         </>
     );
 };
