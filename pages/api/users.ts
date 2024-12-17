@@ -5,7 +5,7 @@ import mysql from 'mysql2';
 import { RowDataPacket } from "mysql2";
 import { generateToken} from "@/app/utils/jwt";
 
-type User = {
+export type User = {
   id: number;
   name: string;
   password: string;
@@ -13,19 +13,49 @@ type User = {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    connection.query('SELECT * FROM users', (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error consulting the database' });
-      }
+    const { id } = req.query;
 
-      // Remove passwords before returning the user data
-      const users = (results as User[]).map((user) => {
-        const { password, ...userWithoutPassword } = user;
-        return userWithoutPassword;  // Return user without password
+    if (id) {
+      connection.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error consulting the database' });
+        }
+        
+        const user = results as User[]; // Access the first row of the result
+
+        if (user.length === 0) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+    
+        // Type results as an array of User objects
+       
+    
+        // Remove password before returning the user data
+        const { password, ...userWithoutPassword } = user[0];
+    
+        res.status(200).json(userWithoutPassword); // Return the user without the password
       });
 
-      res.status(200).json(users);  // Return the modified users array
-    });
+      return;
+    }
+    
+    else {
+      connection.query('SELECT * FROM users', (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error consulting the database' });
+        }
+  
+        // Remove passwords before returning the user data
+        const users = (results as User[]).map((user) => {
+          const { password, ...userWithoutPassword } = user;
+          return userWithoutPassword;  // Return user without password
+        });
+  
+        res.status(200).json(users);  // Return the modified users array
+      });
+      return;
+    }
+
   }
 
   if (req.method === 'POST') {
@@ -58,7 +88,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           });
         });
       });
-      
+      return;
     } else if(action === 'login') {
       const query = "SELECT * FROM users WHERE name = ?";
       connection.query(query, [name], (err, results) => {
@@ -86,9 +116,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           const name: string = user.name;
           const token = generateToken({name});
 
+          const dataSend = {
+            id: user.id,
+            token: token  
+          }
+
           // res.status(200).json({ message: "Login successful", user: { id: user.id, name: user.name } });
-          res.status(200).json({ message: "Login successful", token });
-          return token;
+          res.status(200).json(dataSend);
+
+ 
+
+          console.log(dataSend);
+
+          return dataSend;
         });
       });
     }

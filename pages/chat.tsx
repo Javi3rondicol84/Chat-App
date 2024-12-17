@@ -3,9 +3,8 @@ import SocketClient from "@/app/websocket/socket-client";
 import React, { useEffect, useState } from "react";
 import { getToken, verifyToken } from "@/app/utils/jwt";
 import Nav from "@/app/components/nav/Nav";
-import { JwtPayload } from "jsonwebtoken";
 
-const MyChats = () => {
+const chat = () => {
     const [token, setToken] = useState<string | null>(null);
 
 
@@ -15,6 +14,11 @@ const MyChats = () => {
         if(storedToken !== '') {
             setToken(storedToken);
         }
+
+        // console.log(token);
+        // if(token == null) {
+        //     window.location.href = '/login';
+        // }
 
     }, []);
 
@@ -32,4 +36,4 @@ const MyChats = () => {
     );
 };
 
-export default MyChats;
+export default chat;

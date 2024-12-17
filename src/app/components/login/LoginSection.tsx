@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { createOrLoginUser } from "@/app/utils/api";
-import { generateToken, getToken } from "@/app/utils/jwt";
+import { generateToken, getToken, verifyToken } from "@/app/utils/jwt";
 
 const LoginSection = () => {
     const [name, setName] = useState('');
@@ -11,13 +11,12 @@ const LoginSection = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const token = getToken();
-        
-        if(token) {
-            window.location.href = "/mychats";
+        //if token exists, redirect to my chats
+
+        if(token !== '') {
+            // window.location.href = '/mychats';
         }
     });
-
 
 
      const handleSubmit = async (e: React.FormEvent) => {
@@ -25,10 +24,12 @@ const LoginSection = () => {
     
             try {
                 const data = await createOrLoginUser("login", name, password);
-                console.log("logged in "+ data.token);
+
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('userLoggedId', data.id);
                 setToken(data.token);
                 window.location.href = '/mychats';
+
             }
             catch(err) {
                 console.log("error login user: "+err);

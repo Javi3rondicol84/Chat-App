@@ -1,3 +1,40 @@
+import { User } from "../../../pages/api/users";
+
+
+export const getUserById = async (id: number) => {
+  try {
+    const response = await fetch('/api/users?id='+id);
+
+    if(!response.ok) {
+      console.log("response is not ok");
+    }
+
+    const data: User = await response.json();
+
+    return data;
+  }
+  catch(err) {
+    throw new Error("error getting users");
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const response = await fetch('/api/users');
+
+    if(!response.ok) {
+      console.log("response is not ok");
+    }
+
+    const data: User[] = await response.json();
+
+    return data;
+  }
+  catch(err) {
+    throw new Error("error getting users");
+  }
+};
+
 export const createOrLoginUser = async (action: string, name: string, password: string) => {
     try {
       const response = await fetch('/api/users', { // Adjust the API endpoint if needed
