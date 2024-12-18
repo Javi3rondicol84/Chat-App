@@ -9,7 +9,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const userLoggedId = body.userLoggedId;
         const userId = body.userId;
 
-
         const query = 'SELECT chat_id FROM user_chats WHERE user_id IN (?, ?) GROUP BY chat_id HAVING COUNT(DISTINCT user_id) = 2';
         connection.query(query, [userLoggedId, userId], (err, results) => {
             if (err) {
@@ -19,13 +18,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
             const row = results as RowDataPacket[];
 
+            console.log(row[0].chat_id);
+
             if(row.length === 0) {
                 console.log("row length 0")
-                return res.status(200).json({ chatExists: false });
+                return res.status(200).json({ chatId: null });
             }
             else {
                 console.log("row length more than 0")
-                return res.status(200).json({ chatExists: true, chatId: row[0].chat_id});
+                return res.status(200).json({ chatId: row[0].chat_id});
             }
             
         });

@@ -3,13 +3,11 @@ import { createChat } from "@/app/utils/apiChat";
 
 const StartChat = async (userLoggedId: number, userId: number) => {
 
-    type Data = {
-        
-    }
+    const chatId: string = await createChat(userLoggedId, userId);
 
-    const response: boolean = await createChat(userLoggedId, userId);
+    console.log("startchat"+chatId);
 
-    return response;
+    return chatId;
 }
 
 

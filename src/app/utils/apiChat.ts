@@ -1,7 +1,8 @@
 export const createChat = async (userLoggedId: number, userId: number) => {
     const existsChat: boolean = await existsChatAlready(userLoggedId, userId);
-
+    console.log(userLoggedId+ " ssss "+userId);
     if(!existsChat) {
+        console.log("x");
 
         try {
             const response = await fetch('/api/chat/createchat', {
@@ -13,21 +14,53 @@ export const createChat = async (userLoggedId: number, userId: number) => {
             })
 
             if(!response.ok) {
-                return false;
+                return null;
             }
 
-            return true;
+            const chatId = await getChatId(userLoggedId.toString(), userId.toString());
+            console.log("chatId: "+chatId);
+            return chatId;
         }
         catch(err) {
             console.log(err);
-            return false;
+            return null;
         }
  
     }
     else {
-        return false;
+        console.log("y");
+        const chatId = await getChatId(userLoggedId.toString(), userId.toString());
+        console.log("chatId: "+chatId);
+        return chatId;
     }
 
+}
+
+export const getChatId = async (userLoggedId: string, userId: string) => {
+    console.log("userLoggedId: "+userLoggedId+", userId: "+userId);
+
+    try {
+        const response = await fetch('/api/chat/getchatid', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({userLoggedId, userId})
+        })
+
+        if(!response.ok) {
+            console.log("response is null");
+            return null;
+        }
+
+        const chatId = await response.json();
+
+        return chatId.chatId;
+    }
+    catch(err) {
+        console.log(err);
+        return null;
+    }
 }
 
 

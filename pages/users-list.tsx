@@ -37,15 +37,11 @@ const UsersList = () => {
                 localStorage.setItem('secondUserId', secondUserId);
                 localStorage.setItem('nameSecondUser', nameUser);
 
-                const createdChat: boolean = await StartChat(Number(userLoggedId), userId);
+                const chatId: string = await StartChat(Number(userLoggedId), userId);
 
-                if(createdChat) {
-                    window.location.href = '/chat';
-                }
-                else {
-                    window.location.href = '/chat';
-                }
-                
+                localStorage.setItem('chatId', chatId);
+
+                window.location.href = '/chat';
             }
             catch(err) {
                 console.log("err"+err);

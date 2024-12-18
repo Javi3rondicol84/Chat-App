@@ -7,6 +7,7 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+
 app.prepare().then(() => {
   const expressApp = express();
   const server = createServer(expressApp);
@@ -39,7 +40,7 @@ app.prepare().then(() => {
         io.to([targetSocketId, socket.id]).emit("receiveMessage", {loggedUser, message});
       }
       else {
-        console.log(`User ${targetUserId} is not connected.`);
+        console.log(`User ${secondUserId} is not connected.`);
       }
 
     });
