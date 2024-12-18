@@ -15,11 +15,6 @@ const chat = () => {
             setToken(storedToken);
         }
 
-        // console.log(token);
-        // if(token == null) {
-        //     window.location.href = '/login';
-        // }
-
     }, []);
 
     return (

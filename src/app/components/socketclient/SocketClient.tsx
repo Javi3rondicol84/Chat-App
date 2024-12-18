@@ -7,9 +7,12 @@ import { ChatUi } from "../chatui/ChatUi";
 let socket: Socket | null = null; // Mantener el socket como singleton
 
 export default function SocketClient() {
+  const userIdLogged = localStorage.getItem('userLoggedId');
+  const secondUserId = localStorage.getItem('secondUserId');
+
   const [input, setInput] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<{ id: string; text: string }[]>([]);
+  const [messages, setMessages] = useState<{ loggedUser: string; message: string }[]>([]);
 
   useEffect(() => {
     // Inicializar socket si no está conectado
@@ -20,9 +23,9 @@ export default function SocketClient() {
         console.log("Connected to WebSocket server");
       });
 
-      socket.on("userId", (id: string) => setUserId(id));
+      socket.emit("registerUser", userIdLogged);
 
-      socket.on("receiveMessage", (message: { id: string; text: string }) => {
+      socket.on("receiveMessage", (message) => {
         setMessages((prev) => [...prev, message]);
       });
 
@@ -31,7 +34,7 @@ export default function SocketClient() {
       });
     }
 
-    // Cleanup para desconectar socket al desmontar componente
+    // Cleanup and disconnect
     return () => {
       socket?.disconnect();
       socket = null;
@@ -44,24 +47,26 @@ export default function SocketClient() {
 
   const sendMessage = () => {
     if (input.trim() && socket) {
-      socket.emit("sendMessage", input); // Envía el mensaje al servidor
+      socket.emit("sendMessageToUser", {secondUserId: secondUserId, loggedUser: userIdLogged, message: input});
       setInput(""); // Limpia el input después de enviar
     }
   };
 
-  const userIdOtherUser = localStorage.getItem('secondUserId');
-
   return (
     <>
-
-      <h1 className="text-blue-600">Chat en tiempo real con {userIdOtherUser}</h1>
-      <ChatUi messages={messages} userId={userId} />
+      <h1 className="text-blue-600">Chat en tiempo real con {secondUserId} desde {userIdLogged}</h1>
+      <ChatUi messages={messages} userId={userIdLogged} />
       <div>
         <input
           type="text"
           value={input}
           onChange={handleInputChange}
           placeholder="Escribe un mensaje..."
+          onKeyDown={(e) => {
+            if(e.key == 'Enter') {
+              sendMessage();
+            }
+          }}
         />
         <button onClick={sendMessage}>Enviar</button>
       </div>

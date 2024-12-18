@@ -18,14 +18,30 @@ app.prepare().then(() => {
     path: "/socket.io",
   });
 
+  const userSockets = {};
+  const sockets = {};
+
   // WebSocket events
   io.on("connection", (socket) => {
     console.log(`Client connected: ${socket.id}`);
+
     socket.emit("userId", socket.id); // Enviar userId al cliente
 
-    socket.on("sendMessage", (message) => {
-      const payload = { id: socket.id, text: message };
-      io.emit("receiveMessage", payload); // Retransmitir mensaje a todos
+    socket.on("registerUser", (userLoggedId) => {
+      userSockets[userLoggedId] = socket.id;
+      sockets[socket.id] = userLoggedId;
+    });
+
+    socket.on("sendMessageToUser", ({secondUserId, loggedUser, message}) => {
+      const targetSocketId = userSockets[secondUserId];
+
+      if(targetSocketId) {
+        io.to([targetSocketId, socket.id]).emit("receiveMessage", {loggedUser, message});
+      }
+      else {
+        console.log(`User ${targetUserId} is not connected.`);
+      }
+
     });
 
     socket.on("disconnect", () => {

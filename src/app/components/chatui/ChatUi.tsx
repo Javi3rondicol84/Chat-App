@@ -1,7 +1,7 @@
 
 
 interface ChatUiProps {
-  messages: { id: string; text: string }[];
+  messages: { loggedUser: string; message: string }[];
   userId: string | null;
 }
 
@@ -13,14 +13,14 @@ export function ChatUi({ messages, userId }: ChatUiProps) {
         <div
           key={index}
           style={{
-            textAlign: msg.id === userId ? "right" : "left",
-            backgroundColor: msg.id === userId ? "#DCF8C6" : "#FFF",
+            textAlign: msg.loggedUser === userId ? "right" : "left",
+            backgroundColor: msg.loggedUser === userId ? "#DCF8C6" : "#FFF",
             padding: "5px",
             margin: "5px 0",
             borderRadius: "8px",
           }}
         >
-          <strong>{msg.id === userId ? "Tú" : `Usuario ${msg.id}`}</strong>: {msg.text}
+          <strong>{msg.loggedUser === userId ? "Tú" : `Usuario ${msg.loggedUser}`}</strong>: {msg.message}
         </div>
       ))}
     </div>
