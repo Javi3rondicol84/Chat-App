@@ -28,15 +28,14 @@ const UsersList = () => {
         fetchUsers();
     }, []);
 
-    const startChat = (userId: number) => {
+    const startChat = (userId: number, nameUser: string) => {
 
         const fetchUserById = async () => {
             try {
                 const userLoggedId = localStorage.getItem('userLoggedId');
                 const secondUserId: string = userId.toString();
                 localStorage.setItem('secondUserId', secondUserId);
-                console.log("userloggedid: "+userLoggedId);
-                console.log("userToStartChat: "+userId);
+                localStorage.setItem('nameSecondUser', nameUser);
 
                 const createdChat: boolean = await StartChat(Number(userLoggedId), userId);
 
@@ -65,7 +64,7 @@ const UsersList = () => {
             <ul>
                 {users.map((user) => (
                 <li className="mb-1.5" key={user.id}>{user.name}<button onClick={() => {
-                    startChat(user.id);
+                    startChat(user.id, user.name);
                 }} className="ml-1.5 bg-blue-500">start chat</button></li> // Render user names
                 ))}
             </ul>

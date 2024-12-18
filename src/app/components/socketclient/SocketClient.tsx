@@ -8,7 +8,9 @@ let socket: Socket | null = null; // Mantener el socket como singleton
 
 export default function SocketClient() {
   const userIdLogged = localStorage.getItem('userLoggedId');
+  const nameUserLogged = localStorage.getItem('nameUserLogged');
   const secondUserId = localStorage.getItem('secondUserId');
+  const nameSecondUser = localStorage.getItem('nameSecondUser');
 
   const [input, setInput] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -55,7 +57,7 @@ export default function SocketClient() {
   return (
     <>
       <h1 className="text-blue-600">Chat en tiempo real con {secondUserId} desde {userIdLogged}</h1>
-      <ChatUi messages={messages} userId={userIdLogged} />
+      <ChatUi messages={messages} userId={userIdLogged} nameUser={nameSecondUser}/>
       <div>
         <input
           type="text"

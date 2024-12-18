@@ -3,9 +3,10 @@
 interface ChatUiProps {
   messages: { loggedUser: string; message: string }[];
   userId: string | null;
+  nameUser: string | null;
 }
 
-export function ChatUi({ messages, userId }: ChatUiProps) {
+export function ChatUi({ messages, userId, nameUser }: ChatUiProps) {
   return (
     <>
     <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ddd", padding: "10px" }}>
@@ -20,7 +21,7 @@ export function ChatUi({ messages, userId }: ChatUiProps) {
             borderRadius: "8px",
           }}
         >
-          <strong>{msg.loggedUser === userId ? "Tú" : `Usuario ${msg.loggedUser}`}</strong>: {msg.message}
+          <strong>{msg.loggedUser === userId ? "Tú" : `${nameUser}`}</strong>: {msg.message}
         </div>
       ))}
     </div>

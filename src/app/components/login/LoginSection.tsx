@@ -27,6 +27,7 @@ const LoginSection = () => {
 
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userLoggedId', data.id);
+                localStorage.setItem('nameUserLogged', name);
                 setToken(data.token);
                 window.location.href = '/users-list';
 
