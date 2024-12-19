@@ -33,11 +33,11 @@ app.prepare().then(() => {
       sockets[socket.id] = userLoggedId;
     });
 
-    socket.on("sendMessageToUser", ({secondUserId, loggedUser, message}) => {
+    socket.on("sendMessageToUser", ({secondUserId, loggedUser, message, time}) => {
       const targetSocketId = userSockets[secondUserId];
 
       if(targetSocketId) {
-        io.to([targetSocketId, socket.id]).emit("receiveMessage", {loggedUser, message});
+        io.to([targetSocketId, socket.id]).emit("receiveMessage", {loggedUser, message, time});
       }
       else {
         console.log(`User ${secondUserId} is not connected.`);

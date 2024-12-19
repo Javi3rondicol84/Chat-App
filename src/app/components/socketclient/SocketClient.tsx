@@ -9,22 +9,15 @@ let socket: Socket | null = null; // Mantener el socket como singleton
 
 export default function SocketClient() {
   const userIdLogged = localStorage.getItem('userLoggedId');
-  const nameUserLogged = localStorage.getItem('nameUserLogged');
   const secondUserId = localStorage.getItem('secondUserId');
   const nameSecondUser = localStorage.getItem('nameSecondUser');
   const chatId = localStorage.getItem('chatId');
 
   type Messages = {
     loggedUser: string; 
-    message: string; 
+    message: string;  
+    time: string;
   }
-
-  // type Messagess = {
-  //   content: string;
-  //   user_id: string;  
-  //   sent_at: string; 
-  // }
-
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
@@ -48,35 +41,18 @@ export default function SocketClient() {
         console.log("Disconnected from WebSocket server");
       });
 
-      // async function loadMessages() {
-      //   console.log(chatId);
-      //   if(chatId != null) {
-      //     try {
-      //       const fetchedMessages = await getAllMessages(chatId); 
-      //       console.log(fetchedMessages);
-      //       setMessages(fetchedMessages);
-      //     }
-      //     catch(err) {
-      //       console.log(err);
-      //     }
-      //   }
-      // }
-
       async function loadMessages() {
-        console.log("test");
-        console.log(chatId);
 
         if(chatId != null) {
           try {
-            // const fetchedMessages: Messages[] = await getAllMessages(chatId);
             const fetchedMessages = await getAllMessages(chatId);
 
-            if(fetchedMessages != null) {
-              console.log(fetchedMessages.messages);
+            if (fetchedMessages && Array.isArray(fetchedMessages)) {
+              setMessages(fetchedMessages);
+            } else {
+              console.error("Expected an array in fetchedMessages.messages");
             }
-     
-            //FIX WITH ALL THE FIELDS OF MESSAGE TABLE
-          
+  
           }
           catch(err) {
             console.log(err);
@@ -101,7 +77,14 @@ export default function SocketClient() {
 
   const sendMessage = () => {
     if (input.trim() && socket) {
-      socket.emit("sendMessageToUser", {secondUserId: secondUserId, loggedUser: userIdLogged, message: input});
+      const time = new Date().toLocaleTimeString('en-US', { 
+        hour12: false, 
+        timeZone: 'America/New_York', // Convert to the 'America/New_York' timezone
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+      socket.emit("sendMessageToUser", {secondUserId: secondUserId, loggedUser: userIdLogged, message: input, time: time});
       //save message in the db for both users
       const saveMessage = async () => {
         if(chatId && userIdLogged && input) {

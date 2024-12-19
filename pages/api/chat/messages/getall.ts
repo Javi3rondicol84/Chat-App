@@ -6,13 +6,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if(req.method === 'GET') {
         const chatid = req.query.chatid;
 
-        console.log("geall is: "+chatid);
-
         if (!chatid) {
             return res.status(400).json({ error: 'chat_id is required' });
         }
 
-        const query = 'SELECT content, user_id, sent_at FROM messages WHERE chat_id = ?';
+        const query = 'SELECT user_id AS loggedUser, content AS message, TIME(sent_at) AS time FROM messages WHERE chat_id = ?';
         
         connection.query(query, chatid, (err, results) => {
             if (err) {
@@ -22,14 +20,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
             const rows = results as RowDataPacket[];
 
-            console.log("getall :"+rows);
+            console.log(rows);
 
             if(rows.length === 0) {
-                console.log("row length 0")
                 return res.status(200).json({ messages: null });
             }
-       
-            console.log("row length more than 0")
+    
             return res.status(200).json({ messages: rows});
         });
     }

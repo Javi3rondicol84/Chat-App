@@ -1,10 +1,6 @@
-type Messages = {
-    loggedUser: string; 
-    message: string; 
-  }
 
 export const getAllMessages = async (chatId: string) => {
-    console.log("geeeeeeeeeet"+chatId);
+    
     try {
         const response = await fetch('/api/chat/messages/getall?chatid='+chatId);
         
@@ -14,8 +10,8 @@ export const getAllMessages = async (chatId: string) => {
 
         const allMessages = await response.json();
         
-        console.log(allMessages);
-        return allMessages;
+        console.log(allMessages.messages);
+        return allMessages.messages;
     }
     catch(err) {
         console.log(err);

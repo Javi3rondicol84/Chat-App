@@ -6,12 +6,14 @@ import StartChat from "@/app/components/startchat/StartChat";
 
 const UsersList = () => {
     const [users, setUsers] = useState<User[]>([]);
-
-    type Data = {
-        
-    }
+    const [userLoggedId, setUserLoggedId] = useState<string>('');
 
     useEffect(() => {
+        const userLoggedId = localStorage.getItem('userLoggedId');
+        if(userLoggedId) {
+            setUserLoggedId(userLoggedId);
+        }
+            
         const fetchUsers = async () => {
             try {
                 const fetchedUsers = await getAllUsers();
@@ -51,6 +53,8 @@ const UsersList = () => {
         fetchUserById();
     }
 
+
+
     return (
         <div>
             <h2>User List</h2>
@@ -59,9 +63,12 @@ const UsersList = () => {
             ) : (
             <ul>
                 {users.map((user) => (
-                <li className="mb-1.5" key={user.id}>{user.name}<button onClick={() => {
-                    startChat(user.id, user.name);
-                }} className="ml-1.5 bg-blue-500">start chat</button></li> // Render user names
+
+                 String(user.id) !== userLoggedId ? (
+                    <li className="mb-1.5" key={user.id}>{user.name}<button onClick={() => {
+                        startChat(user.id, user.name);
+                    }} className="ml-1.5 bg-blue-500">start chat</button></li> 
+                 ):null        
                 ))}
             </ul>
             )}

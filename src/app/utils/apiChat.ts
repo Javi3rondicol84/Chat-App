@@ -1,8 +1,7 @@
 export const createChat = async (userLoggedId: number, userId: number) => {
     const existsChat: boolean = await existsChatAlready(userLoggedId, userId);
-    console.log(userLoggedId+ " ssss "+userId);
+    
     if(!existsChat) {
-        console.log("x");
 
         try {
             const response = await fetch('/api/chat/createchat', {
@@ -18,7 +17,7 @@ export const createChat = async (userLoggedId: number, userId: number) => {
             }
 
             const chatId = await getChatId(userLoggedId.toString(), userId.toString());
-            console.log("chatId: "+chatId);
+
             return chatId;
         }
         catch(err) {
@@ -28,16 +27,14 @@ export const createChat = async (userLoggedId: number, userId: number) => {
  
     }
     else {
-        console.log("y");
         const chatId = await getChatId(userLoggedId.toString(), userId.toString());
-        console.log("chatId: "+chatId);
+
         return chatId;
     }
 
 }
 
 export const getChatId = async (userLoggedId: string, userId: string) => {
-    console.log("userLoggedId: "+userLoggedId+", userId: "+userId);
 
     try {
         const response = await fetch('/api/chat/getchatid', {

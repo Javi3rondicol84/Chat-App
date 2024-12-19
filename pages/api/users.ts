@@ -27,9 +27,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           return res.status(404).json({ error: 'User not found' });
         }
     
-        // Type results as an array of User objects
-       
-    
         // Remove password before returning the user data
         const { password, ...userWithoutPassword } = user[0];
     

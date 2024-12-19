@@ -6,7 +6,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     if(req.method === 'POST') {
         const body = req.body;
 
-        const query = 'INSERT INTO messages (chat_id, user_id, content) VALUES (?, ?, ?)';
+        const query = 'INSERT INTO messages (chat_id, user_id, content, sent_at) VALUES (?, ?, ?, CONVERT_TZ(NOW(), "+00:00", "America/New_York"))';
 
         connection.query(query, [body.chatId, body.loggedUser, body.message], (err, results) => {
             if (err) {

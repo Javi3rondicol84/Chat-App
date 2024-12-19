@@ -21,11 +21,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             console.log(row[0].chat_id);
 
             if(row.length === 0) {
-                console.log("row length 0")
                 return res.status(200).json({ chatId: null });
             }
             else {
-                console.log("row length more than 0")
                 return res.status(200).json({ chatId: row[0].chat_id});
             }
             

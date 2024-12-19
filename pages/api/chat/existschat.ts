@@ -20,11 +20,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             const row = results as RowDataPacket[];
 
             if(row.length === 0) {
-                console.log("row length 0")
                 return res.status(200).json({ chatExists: false });
             }
             else {
-                console.log("row length more than 0")
                 return res.status(200).json({ chatExists: true, chatId: row[0].chat_id});
             }
             
