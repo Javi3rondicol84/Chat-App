@@ -63,28 +63,39 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if(action === 'register') {
-        
-      // Hash the password before saving it
-      bcrypt.hash(password, 10, (err, hashedPassword) => {
+      const checkUserQuery = 'SELECT * FROM users WHERE name = ?';
+      connection.query(checkUserQuery, [name], (err, result) => {
         if (err) {
-          return res.status(500).json({ error: 'Error hashing the password' });
+          return res.status(500).json({ error: 'Error checking for existing user' });
         }
 
-        const query = 'INSERT INTO users (name, password) VALUES (?, ?)';
-        connection.query(query, [name, hashedPassword], (err, result) => {
+        const rows = result as RowDataPacket[];
+    
+        if (rows.length > 0) {
+          return res.status(400).json({ error: 'Username is already taken' });
+        }
+    
+        bcrypt.hash(password, 10, (err, hashedPassword) => {
           if (err) {
-            return res.status(500).json({ error: 'Error inserting a new user in the database' });
+            return res.status(500).json({ error: 'Error hashing the password' });
           }
-
-          // `result` is of type `ResultSetHeader`, so we can access `insertId` directly
-          const insertId = (result as mysql.ResultSetHeader).insertId;
-
-          res.status(201).json({
-            message: 'User created successfully',
-            user: { id: insertId, name },  // Return the new user's id and name
+    
+          const query = 'INSERT INTO users (name, password) VALUES (?, ?)';
+          connection.query(query, [name, hashedPassword], (err, result) => {
+            if (err) {
+              return res.status(500).json({ error: 'Error inserting a new user in the database' });
+            }
+    
+            const insertId = (result as mysql.ResultSetHeader).insertId;
+    
+            res.status(201).json({
+              message: 'User created successfully',
+              user: { id: insertId, name },
+            });
           });
         });
       });
+
       return;
     } else if(action === 'login') {
       const query = "SELECT * FROM users WHERE name = ?";
@@ -120,10 +131,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
           // res.status(200).json({ message: "Login successful", user: { id: user.id, name: user.name } });
           res.status(200).json(dataSend);
-
- 
-
-          console.log(dataSend);
 
           return dataSend;
         });

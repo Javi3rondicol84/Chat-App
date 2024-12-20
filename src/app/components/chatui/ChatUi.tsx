@@ -7,26 +7,35 @@ interface ChatUiProps {
 }
 
 export function ChatUi({ messages, userId, nameUser }: ChatUiProps) {
-  console.log(messages);
+
   return (
     <>
-    <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ddd", padding: "10px" }}>
+    <div className="max-h-80 overflow-y-auto border border-gray-300 rounded-lg p-4 bg-gray-50">
       {messages.map((msg, index) => (
         <div
           key={index}
-          style={{
-            textAlign: String(msg.loggedUser) === userId ? "right" : "left",
-            backgroundColor: String(msg.loggedUser) === userId ? "#DCF8C6" : "#FFF",
-            padding: "5px",
-            margin: "5px 0",
-            borderRadius: "8px",
-          }}
+          className={`flex ${
+            String(msg.loggedUser) === userId ? "justify-end" : "justify-start"
+          } mb-3`}
         >
-          <strong>{String(msg.loggedUser) === userId ? "Tú" : `${nameUser}`}</strong>: {String(msg.time)}: {msg.message} 
+          <div
+            className={`max-w-xs px-4 py-2 rounded-lg shadow-md ${
+              String(msg.loggedUser) === userId
+                ? "bg-green-500 text-white"
+                : "bg-gray-200 text-gray-800"
+            }`}
+          >
+            <strong className="block text-sm">
+              {String(msg.loggedUser) === userId ? "Tú" : nameUser}
+            </strong>
+            <span className="text-xs text-gray-300">
+              {String(msg.time)}
+            </span>
+            <p className="mt-1">{msg.message}</p>
+          </div>
         </div>
       ))}
     </div>
     </>
-    
   );
 }

@@ -4,17 +4,30 @@ import React from "react";
 const Nav = () => {
     return (
         <>
-            <header className="flex w-full bg-green-200 h-10 justify-center">
-                <nav className="flex bg-blue-300 w-8/12 h-full">
-                    <ul className="flex justify-evenly w-full items-center">
-                        <li><a className="hover:text-green-500" href="./mychats">my chats</a></li>
-                        <li><a className="hover:text-green-500" href="./users-list">users-list</a></li>
-                        <li><a className="hover:text-green-500" href="./logout">logout</a></li>
-                    </ul>
-                </nav>
-            </header>
+          <header className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg">
+            <nav className="max-w-6xl mx-auto flex justify-between items-center h-14 px-6">
+              <ul className="flex space-x-6">
+                <li>
+                  <a
+                    className="text-white font-semibold hover:text-yellow-300 transition duration-300"
+                    href="./users-list"
+                  >
+                    User List
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="text-white font-semibold hover:text-yellow-300 transition duration-300"
+                    href="./logout"
+                  >
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </header>
         </>
-    );
+      );
 };
 
 export default Nav;

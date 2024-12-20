@@ -10,7 +10,6 @@ export const getAllMessages = async (chatId: string) => {
 
         const allMessages = await response.json();
         
-        console.log(allMessages.messages);
         return allMessages.messages;
     }
     catch(err) {
@@ -34,7 +33,6 @@ export const saveMessageInDb = async (chatId: string, loggedUser: string, messag
             return;
         }
 
-        console.log("message saved");
     }
     catch(err) {
         console.log("error saving massage: "+err);
